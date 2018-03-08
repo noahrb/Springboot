@@ -32,6 +32,18 @@ public class Greeting {
 		
 		return output;
 	}
+	
+	//Helper method for Converting .pfx files to usable Strings. 
+	public static String convertPFXtoString(String path) throws IOException {
+		File file = new File(path);
+		byte[] bytesArray = new byte[(int) file.length()];
+		FileInputStream fis = new FileInputStream(file);
+		fis.read(bytesArray); // read file into bytes[]
+		fis.close();
+		String output = Base64.getEncoder().encodeToString(bytesArray);
+		System.out.println(output);
+		return output;
+	}
 		
 	//Sample id processing http GET 
 	@RequestMapping("/idprocess")
