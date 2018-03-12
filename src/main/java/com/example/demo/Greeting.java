@@ -2,14 +2,8 @@ package com.example.demo;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Base64;
-import java.util.Scanner;
-
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
@@ -26,10 +20,7 @@ public class Greeting {
 
 	@RequestMapping("/certtest")
 	public @ResponseBody String certTest() throws IOException {
-		Path path = FileSystems.getDefault().getPath("resources", "test.pfx");
-		byte[] bytes = Files.readAllBytes(path);
-		String output = new String(bytes);
-		
+		String output = convertPFXtoString("C:\\Users\\nbeverly\\Desktop\\test1.pfx");
 		return output;
 	}
 	
