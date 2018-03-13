@@ -1,8 +1,11 @@
 package com.example.demo;
 
+import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Base64;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamResource;
@@ -35,7 +38,73 @@ public class Greeting {
 		System.out.println(output);
 		return output;
 	}
+	
+	//Step 3 (ovcm get cert)
+	
+	//TODO: create additional command following the ovcm issue to be a blank '' command sending.
+	@RequestMapping("/cert")
+	public @ResponseBody String getCert(@RequestParam("coreID") String coreid, @RequestParam("hostname") String hostname) throws IOException {
+
+		// String response = "Invalid Hostname";
+		//return "coreID = " + coreid + "hostname = " + hostname;
+		String result = "";
+		System.out.println("BEFORE OVCM COMMAND");
+		String ovcmCmd = "ovcm -issue -file " + coreid + ".pfx " + "-name " + hostname + "\r\n" + "\r\n";
+		System.out.println("AFTER OVCM COMMAND");
+		try {
+			Runtime r = Runtime.getRuntime();
+			Process p = r.exec(ovcmCmd);
+
+			BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			String inputLine;
+			while ((inputLine = in.readLine()) != null) {
+				System.out.println(inputLine);
+				result += inputLine + "\n";
+			}
+			in.close();
+
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+		System.out.println("AFTER TRY/CATCH && BEFORE HELPER CALL");
+		return convertPFXtoString(coreid + ".pfx");
 		
+		//return result;
+	}
+	//id processing helper method
+	public String getCertHelper(String input) {
+
+		return input + " TEST WORKS WOO";
+	}
+	
+//	public static void enterKeyInCommand() {
+//	String ovcmCmd = "ovcm -issue -file " + coreid + ".pfx " + "-name " + hostname + "\n" + "\n";
+//	try {
+//		Runtime r = Runtime.getRuntime();
+//		Process p = r.exec(ovcmCmd);
+//
+//		BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+//		String inputLine;
+//		while ((inputLine = in.readLine()) != null) {
+//			System.out.println(inputLine);
+//			result += inputLine + "\n";
+//		}
+//		in.close();
+//
+//	} catch (IOException e) {
+//		System.out.println(e);
+//	}
+//	return convertPFXtoString(coreid + ".pfx");
+//	//return result;
+//	}
+	
+	
+	
+	
+	
+	
+	
+	
 	//Sample id processing http GET 
 	@RequestMapping("/idprocess")
 	public @ResponseBody String httpGETprocessID(@RequestParam("id") String itemid) {
