@@ -41,14 +41,13 @@ public class Greeting {
 
 	// Step 3 (ovcm get cert)
 
-	// TODO: create additional command following the ovcm issue to be a blank ''
 	// command sending.
 	@RequestMapping("/cert")
 	public @ResponseBody String getCert(@RequestParam("coreID") String coreid,
 			@RequestParam("hostname") String hostname) throws IOException {
 
 		System.out.println("BEFORE OVCM COMMAND");
-		String ovcmCmd = "ovcm -issue -file " + coreid + ".pfx " + "-name " + hostname;
+		String ovcmCmd = "ovcm -issue -file " + coreid + ".pfx " + "-name " + hostname + " -pass glg";
 		System.out.println("AFTER OVCM COMMAND");
 		try {
 			Runtime r = Runtime.getRuntime();
@@ -61,8 +60,6 @@ public class Greeting {
 			}
 			in.close();
 
-			enterKeyInCommand(r, p);
-			enterKeyInCommand(r, p);
 		} catch (IOException e) {
 			System.out.println(e);
 		}
