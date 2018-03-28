@@ -10,6 +10,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
 
 @Controller
 public class Greeting {
@@ -60,6 +64,55 @@ public class Greeting {
 		return convertPFXtoString(coreid + ".pfx");
 
 		// return result;
+	}
+
+	// Step3: Return necessary policies given a coreid.
+
+	// Sample GET for file download.
+	@RequestMapping("/download")
+	public ResponseEntity<InputStreamResource> sampleGETFileReturn(@RequestParam("policyGroup") String policyGroup)
+			throws IOException {
+		ResponseEntity<InputStreamResource> response = getFiles(policyGroup);
+		return response;
+	}
+
+	// Sample helper method for GET file download.
+	//TODO: Add policy group names and file paths.
+	public ResponseEntity<InputStreamResource> getFiles(String input) throws IOException {
+		if (input.equals("createpkg")) {
+			ClassPathResource zipFile = new ClassPathResource("create_package.zip");
+
+			return ResponseEntity.ok().contentLength(zipFile.contentLength())
+					.contentType(MediaType.parseMediaType("application/zip"))
+					.body(new InputStreamResource(zipFile.getInputStream()));
+		}
+		if (input.equals("samplePolicies1")) {
+			ClassPathResource zipFile = new ClassPathResource("INSERT PATH");
+
+			return ResponseEntity.ok().contentLength(zipFile.contentLength())
+					.contentType(MediaType.parseMediaType("application/zip"))
+					.body(new InputStreamResource(zipFile.getInputStream()));
+		}
+		if (input.equals("samplePolicies2")) {
+			ClassPathResource zipFile = new ClassPathResource("INSERT PATH");
+
+			return ResponseEntity.ok().contentLength(zipFile.contentLength())
+					.contentType(MediaType.parseMediaType("application/zip"))
+					.body(new InputStreamResource(zipFile.getInputStream()));
+		}
+		if (input.equals("samplePolicies3")) {
+			ClassPathResource zipFile = new ClassPathResource("INSERT PATH");
+
+			return ResponseEntity.ok().contentLength(zipFile.contentLength())
+					.contentType(MediaType.parseMediaType("application/zip"))
+					.body(new InputStreamResource(zipFile.getInputStream()));
+		} else {
+			ClassPathResource zipFile = new ClassPathResource("INSERT PATH");
+
+			return ResponseEntity.ok().contentLength(zipFile.contentLength())
+					.contentType(MediaType.parseMediaType("application/zip"))
+					.body(new InputStreamResource(zipFile.getInputStream()));
+		}
 	}
 
 }
