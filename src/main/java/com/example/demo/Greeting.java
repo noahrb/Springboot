@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Base64;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -68,52 +69,108 @@ public class Greeting {
 
 	// Step3: Return necessary policies given a coreid.
 
-	// Sample GET for file download.
-	@RequestMapping("/download")
-	public ResponseEntity<InputStreamResource> sampleGETFileReturn(@RequestParam("policyGroup") String policyGroup)
+	// GET for file download.
+	@RequestMapping("/policy")
+	public ResponseEntity<InputStreamResource> getPolicyReturn(@RequestParam("coreid") String coreid)
 			throws IOException {
-		ResponseEntity<InputStreamResource> response = getFiles(policyGroup);
+		String output = "";
+		System.out.println("BEFORE GET POLICY");
+		String ovcmCmd = "ovpolicy -list " + coreid;
+		System.out.println("AFTER GET POLICY");
+		try {
+			Runtime r = Runtime.getRuntime();
+			Process p = r.exec(ovcmCmd);
+
+			BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			String inputLine;
+			while ((inputLine = in.readLine()) != null) {
+				System.out.println(inputLine);
+			}
+			in.close();
+			output = inputLine;
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+		// Insert complete list of policies and compare to see if the output of this
+		// command contains the keywords(names) of the list of policies.
+
+		// TODO: Possibly make a ArrayList<String, String> to firstly hold the name of
+		// the policy, and the path the the policy resource in the workspace.
+		ArrayList<String> policyList = new ArrayList<String>();
+		ArrayList<String> newPolicies = new ArrayList<String>();
+		for (int i = 0; i < policyList.size(); i++) {
+			if (output.contains("INSERT FULL LIST OF POLICIES HERE")) {
+				newPolicies.add(policyList.get(i));
+			}
+		}
+		ResponseEntity<InputStreamResource> response = getFiles(newPolicies);
 		return response;
 	}
 
-	// Sample helper method for GET file download.
-	//TODO: Add policy group names and file paths.
-	public ResponseEntity<InputStreamResource> getFiles(String input) throws IOException {
-		if (input.equals("createpkg")) {
-			ClassPathResource zipFile = new ClassPathResource("create_package.zip");
+	// Helper method for GET file download.
+	// TODO: Add policy group names and file paths.
+	public ResponseEntity<InputStreamResource> getFiles(ArrayList<String> list) throws IOException {
 
-			return ResponseEntity.ok().contentLength(zipFile.contentLength())
-					.contentType(MediaType.parseMediaType("application/zip"))
-					.body(new InputStreamResource(zipFile.getInputStream()));
+		if (list.contains("INSERT POLICY HERE")) {
+
 		}
-		if (input.equals("samplePolicies1")) {
-			ClassPathResource zipFile = new ClassPathResource("INSERT PATH");
 
-			return ResponseEntity.ok().contentLength(zipFile.contentLength())
-					.contentType(MediaType.parseMediaType("application/zip"))
-					.body(new InputStreamResource(zipFile.getInputStream()));
+		if (list.contains("INSERT POLICY HERE")) {
+
 		}
-		if (input.equals("samplePolicies2")) {
-			ClassPathResource zipFile = new ClassPathResource("INSERT PATH");
 
-			return ResponseEntity.ok().contentLength(zipFile.contentLength())
-					.contentType(MediaType.parseMediaType("application/zip"))
-					.body(new InputStreamResource(zipFile.getInputStream()));
+		if (list.contains("INSERT POLICY HERE")) {
+
 		}
-		if (input.equals("samplePolicies3")) {
-			ClassPathResource zipFile = new ClassPathResource("INSERT PATH");
 
-			return ResponseEntity.ok().contentLength(zipFile.contentLength())
-					.contentType(MediaType.parseMediaType("application/zip"))
-					.body(new InputStreamResource(zipFile.getInputStream()));
-		} else {
-			ClassPathResource zipFile = new ClassPathResource("INSERT PATH");
+		if (list.contains("INSERT POLICY HERE")) {
 
-			return ResponseEntity.ok().contentLength(zipFile.contentLength())
-					.contentType(MediaType.parseMediaType("application/zip"))
-					.body(new InputStreamResource(zipFile.getInputStream()));
 		}
+
+		if (list.contains("INSERT POLICY HERE")) {
+
+		}
+		
+		//TODO: Create a zip containing this list of policies and export it then 
+		//TODO: read it with this new class path resource. \/
+		ClassPathResource zipFile = new ClassPathResource("create_package.zip");
+
+		return ResponseEntity.ok().contentLength(zipFile.contentLength())
+				.contentType(MediaType.parseMediaType("application/zip"))
+				.body(new InputStreamResource(zipFile.getInputStream()));
 	}
+	/*
+	 * 
+	 * if (list.contains("createpkg")) { ClassPathResource zipFile = new
+	 * ClassPathResource("create_package.zip");
+	 * 
+	 * return ResponseEntity.ok().contentLength(zipFile.contentLength())
+	 * .contentType(MediaType.parseMediaType("application/zip")) .body(new
+	 * InputStreamResource(zipFile.getInputStream())); } if
+	 * (list.contains("samplePolicies1")) { ClassPathResource zipFile = new
+	 * ClassPathResource("INSERT PATH");
+	 * 
+	 * return ResponseEntity.ok().contentLength(zipFile.contentLength())
+	 * .contentType(MediaType.parseMediaType("application/zip")) .body(new
+	 * InputStreamResource(zipFile.getInputStream())); } if
+	 * (list.contains("samplePolicies2")) { ClassPathResource zipFile = new
+	 * ClassPathResource("INSERT PATH");
+	 * 
+	 * return ResponseEntity.ok().contentLength(zipFile.contentLength())
+	 * .contentType(MediaType.parseMediaType("application/zip")) .body(new
+	 * InputStreamResource(zipFile.getInputStream())); } if
+	 * (list.contains("samplePolicies3")) { ClassPathResource zipFile = new
+	 * ClassPathResource("INSERT PATH");
+	 * 
+	 * return ResponseEntity.ok().contentLength(zipFile.contentLength())
+	 * .contentType(MediaType.parseMediaType("application/zip")) .body(new
+	 * InputStreamResource(zipFile.getInputStream())); } else { ClassPathResource
+	 * zipFile = new ClassPathResource("INSERT PATH");
+	 * 
+	 * return ResponseEntity.ok().contentLength(zipFile.contentLength())
+	 * .contentType(MediaType.parseMediaType("application/zip")) .body(new
+	 * InputStreamResource(zipFile.getInputStream())); } }
+	 */
 
 }
 
