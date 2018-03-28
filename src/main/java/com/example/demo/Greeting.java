@@ -1,38 +1,28 @@
 package com.example.demo;
 
-import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Base64;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class Greeting {
 
-
-
-
 	// Step1: Handle an http get to return a bash(plaintext) output
 	@RequestMapping("/bash")
 	public @ResponseBody String greeting() {
-		String bashOutput = ""; //Insert bashScript here.
+		String bashOutput = ""; // Insert bashScript here.
 		return bashOutput;
 	}
 
 	// Step2: Handle an http get to grant cert & return cert as plaintext.
-		// Helper method for Converting .pfx files to usable Strings.
+	// Helper method for Converting .pfx files to usable Strings.
 	public static String convertPFXtoString(String path) throws IOException {
 		File file = new File(path);
 		byte[] bytesArray = new byte[(int) file.length()];
@@ -43,7 +33,7 @@ public class Greeting {
 		System.out.println(output);
 		return output;
 	}
-	
+
 	@RequestMapping("/cert")
 	public @ResponseBody String getCert(@RequestParam("coreID") String coreid,
 			@RequestParam("hostname") String hostname) throws IOException {
@@ -79,11 +69,12 @@ public class Greeting {
 // EXTRA COMMANDS
 //
 //
-//@RequestMapping("/certtest")
-//public @ResponseBody String certTest() throws IOException {
-//	String output = convertPFXtoString("C:\\Users\\nbeverly\\Desktop\\test1.pfx");
-//	return output;
-//}
+// @RequestMapping("/certtest")
+// public @ResponseBody String certTest() throws IOException {
+// String output =
+// convertPFXtoString("C:\\Users\\nbeverly\\Desktop\\test1.pfx");
+// return output;
+// }
 // // id processing helper method
 // public String getCertHelper(String input) {
 //
